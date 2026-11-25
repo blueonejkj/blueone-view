@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><title>블루원 상주 일일 보고서</title></head>
+<body style="font:16px/1.6 -apple-system,'Malgun Gothic',sans-serif;padding:24px;color:#333">
+<p id="msg">보고서를 불러오는 중입니다…</p>
+<script>
+// 이 페이지에는 데이터가 없습니다. 주소 뒤 #d=날짜&k=열람키 로 구글 드라이브의 보고서를
+// 로그인 정보 없이(credentials: omit) 가져와 그대로 보여 줍니다. 열람키가 틀리면 아무것도 보이지 않습니다.
+const GAS = "https://script.google.com/macros/s/AKfycbxSk20EjaT2Gu9O_5tDE4Y7PyTfVAOrbN5AtjgL4yuYZbGeoLmSut717-TQnLoQKYSK_g/exec";
+const q = new URLSearchParams(location.hash.slice(1) || location.search.slice(1));
+const say = t => document.getElementById("msg").textContent = t;
+if (!q.get("k")) say("열람 주소가 올바르지 않습니다. 카톡의 '보고서 열기' 버튼으로 열어 주세요.");
+else fetch(`${GAS}?fmt=raw&d=${encodeURIComponent(q.get("d") || "")}&k=${encodeURIComponent(q.get("k"))}`, { credentials: "omit", cache: "no-store" })
+  .then(r => r.text())
+  .then(h => { if (!h.trim()) return say("보고서가 없거나 열람 권한이 없습니다."); document.open(); document.write(h); document.close(); })
+  .catch(() => say("보고서를 불러오지 못했습니다. 잠시 뒤 다시 열어 주세요."));
+</script>
+</body></html>
